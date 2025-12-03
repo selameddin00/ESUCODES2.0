@@ -1,109 +1,118 @@
 # 🚀 ESUCODES - Explore Software Universe
 
-Siber güvenlik ve yazılım odaklı, **Galactic/Sci-Fi** temalı ultra modern web platformu.
+Software, Robotics, AI and CyberSecurity focused, **galactic / sci‑fi themed** ultra‑modern web platform.
 
-Bu README, **öğrenciler ve yeni başlayanlar** düşünülerek hazırlandı.  
-Kod bilgin az olsa bile, adım adım takip ederek projeyi **bilgisayarına kurabilir, çalıştırabilir ve yapısını anlayabilirsin.**
+This README is written for **students and beginners**.  
+Even if your coding experience is small, you can **install, run and understand** this project on your own computer by following the steps.
 
-## 📋 İçindekiler
+## 📋 Table of Contents
 
-- [Bu Proje Nedir? Kimin İçin?](#-bu-proje-nedir-kimin-için)
-- [Özellikler](#-özellikler)
-- [Teknoloji Yığını](#-teknoloji-yığını)
-- [Yeni Başlayanlar İçin Hızlı Rehber](#-yeni-başlayanlar-i̇çin-hızlı-rehber)
-- [Kurulum](#-kurulum)
-- [Yapılandırma](#-yapılandırma)
-- [WordPress API Bağlantısı](#-wordpress-api-bağlantısı)
-- [Geliştirme](#-geliştirme)
-- [Proje Yapısı](#-proje-yapısı)
+- [What is this project? Who is it for?](#-what-is-this-project-who-is-it-for)
+- [Features](#-features)
+- [Tech Stack](#-tech-stack)
+- [Quick Start for Beginners](#-quick-start-for-beginners)
+- [Installation](#-installation)
+- [Configuration](#-configuration)
+- [WordPress API Integration](#-wordpress-api-integration)
+- [Development](#-development)
+- [Project Structure](#-project-structure)
 - [Easter Eggs](#-easter-eggs)
+- [Design System](#-design-system)
+- [Deployment](#-deployment)
+- [Notes](#-notes)
+- [Contributing](#-contributing)
+- [License](#-license)
+- [Team](#-team)
 
-## ❓ Bu Proje Nedir? Kimin İçin?
+## ❓ What is this project? Who is it for?
 
-- **Amaç**: ESUCODES, siber güvenlik ve yazılım dünyasını, uzay/galaksi temalı modern bir arayüzle tanıtan bir web platformudur.
-- **Kullanıcılar**: Öğrenciler, yazılım/siber güvenlik öğrenmek isteyenler, topluluk üyeleri ve eğitmenler.
-- **Teknik hedef**: Next.js, TypeScript, Tailwind gibi modern teknolojileri kullanarak hem şık hem de performanslı bir site sunmak.
+- **Purpose**: ESUCODES is a web platform that introduces the world of software with a modern, space/galaxy themed interface.
+- **Audience**: Students, people who want to learn universe of software, community members and educators.
+- **Technical goal**: Use modern tools like Next.js, TypeScript and Tailwind to build a stylish and high‑performance site.
 
-Bu projeyi:
-- Portföyüne ekleyebilir,
-- Tasarım ve frontend mimarisi öğrenmek için inceleyebilir,
-- Kendi kulüp/topluluk siteni yapmak için şablon olarak kullanabilirsin.
+You can use this project to:
+- Add a strong project to your **portfolio**
+- Learn **frontend architecture and design**
+- Use it as a **template** for your own club / community website
 
-## ✨ Özellikler
+## ✨ Features
 
-- 🌌 **Galactic/Sci-Fi Tema**: Futuristik, neon efektli, glassmorphism tasarım
-- 📱 **Responsive Design**: Tüm cihazlarda mükemmel görünüm
-- 🎨 **Modern Animasyonlar**: Framer Motion ile yumuşak geçişler
-- 🔒 **Siber Güvenlik Odaklı**: Güvenlik best practices
-- 📝 **Headless WordPress**: WordPress API entegrasyonu
-- 🎮 **Easter Eggs**: Konami Code, Console mesajları, Glitch efektleri
-- ⚡ **Performans**: Next.js 14 App Router ile optimize edilmiş
+- 🌌 **Galactic / Sci‑Fi Theme**: Futuristic design with neon effects and glassmorphism
+- 📱 **Responsive Design**: Looks great on desktop, tablet and mobile
+- 🎨 **Modern Animations**: Smooth transitions with Framer Motion
+- 📝 **Headless WordPress**: WordPress REST API integration for content
+- 🎮 **Easter Eggs**: Konami Code, console messages, glitch effects and more
+- ⚡ **Performance**: Optimized with Next.js 14 App Router
 
-## 🛠 Teknoloji Yığını
+## 🛠 Tech Stack
 
 - **Framework**: Next.js 14+ (App Router)
-- **Dil**: TypeScript (Strict Mode)
-- **Stil**: TailwindCSS
-- **Animasyon**: Framer Motion
-- **İkonlar**: Lucide React
-- **Grafikler**: Recharts
-- **CMS**: Headless WordPress
+- **Language**: TypeScript (strict mode)
+- **Styling**: Tailwind CSS
+- **Animations**: Framer Motion
+- **Icons**: Lucide React
+- **Charts**: Recharts
+- **CMS**: Headless WordPress (optional)
 
-## 🧭 Yeni Başlayanlar İçin Hızlı Rehber
+## 🧭 Quick Start for Beginners
 
-Kodla yeni tanışıyorsan, aşağıdaki adımlar sana yol gösterecek:
+If you are new to coding, this section explains the basics in simple language.
 
-1. **Node.js Nedir?**  
-   JavaScript kodunu bilgisayarında çalıştırmanı sağlayan altyapıdır. Bu projeyi çalıştırmak için gerekli.
-2. **Kodu Nasıl Açacağım?**  
-   - `esucodes2.0` klasörünü bilgisayarına indir/klonla.  
-   - Sonra bu klasörü VS Code gibi bir editörle aç.
-3. **Terminal Nedir?**  
-   Komut yazarak bilgisayarına “talimat” verdiğin pencere.  
-   VS Code’da aşağıdaki kısayol ile açabilirsin:
-   - Windows: `Ctrl + ö` (veya `Ctrl + Shift + \``)
-4. **Projeyi Çalıştırma Mantığı**  
-   - Önce bağımlılıkları indiriyoruz: `npm install`  
-   - Sonra geliştirme sunucusunu açıyoruz: `npm run dev`  
-   - Son olarak tarayıcıdan: `http://localhost:3000` adresine gidiyoruz.
+1. **What is Node.js?**  
+   A tool that allows you to run JavaScript on your computer.  
+   You need it to run this project.
 
-Takıldığın noktada her adımı yavaşça tekrar okuyup aynısını yaptığından emin ol.
+2. **How do I open the code?**  
+   - Download or clone the `esucodes2.0` folder to your computer.  
+   - Open this folder in a code editor like **VS Code**.
 
-## 🚀 Kurulum
+3. **What is a terminal?**  
+   A window where you type commands to tell your computer what to do.  
+   In VS Code you can open it from the menu:  
+   - `View` → `Terminal`
 
-### Gereksinimler
+4. **How does running the project work?**  
+   - First we install the dependencies: `npm install`  
+   - Then we start the development server: `npm run dev`  
+   - Finally we open the browser at: `http://localhost:3000`
 
-- Node.js 18+ (resmi siteden indirilebilir)
-- npm (Node ile birlikte gelir) veya yarn
-- (İsteğe bağlı) WordPress kurulumu – blog yazılarını WordPress’ten çekmek istiyorsan gerekir
+If you get stuck, read each step slowly and make sure you are typing the same commands.
 
-### Adımlar
+## 🚀 Installation
 
-1. **Projeyi klonlayın veya indirin**
+### Requirements
+
+- Node.js 18+ (download from the official website)
+- npm (comes with Node) or yarn
+- (Optional) A WordPress installation – only needed if you want to fetch blog posts from WordPress
+
+### Steps
+
+1. **Clone or download the project**
 
 ```bash
 cd esucodes2.0
 ```
 
-2. **Bağımlılıkları yükleyin**
+2. **Install dependencies**
 
 ```bash
 npm install
 ```
 
-veya
+or
 
 ```bash
 yarn install
 ```
 
-3. **Environment değişkenlerini ayarlayın**
+3. **Set up environment variables**
 
-Bu proje bazı gizli ayarları (URL, şifre vb.) `.env` dosyasında tutar.
+This project uses a `.env` file to store secret or environment‑specific values (URLs, passwords, etc.).
 
-- Proje klasörünün kökünde (yani `package.json` ile aynı yerde) **yeni bir dosya** oluşturun:
-  - Dosya adı: `.env`
-- Aşağıdaki örneği kopyalayıp kendi bilgilere göre düzenleyin (aşağıda detaylı açıklaması var):
+- In the project root (same folder as `package.json`) create a **new file**:
+  - File name: `.env`
+- Copy the example below and adjust it for your setup:
 
 ```env
 NEXT_PUBLIC_WORDPRESS_API_URL=http://localhost:8080/wp-json/wp/v2
@@ -114,30 +123,30 @@ NEXT_PUBLIC_SITE_NAME=ESUCODES
 ADMIN_SECRET_KEY=your_secret_key_here
 ```
 
-4. **Geliştirme sunucusunu başlatın**
+4. **Start the development server**
 
 ```bash
 npm run dev
 ```
 
-veya
+or
 
 ```bash
 yarn dev
 ```
 
-5. **Tarayıcıda açın**
+5. **Open in your browser**
 
 ```
 http://localhost:3000
 ```
 
-## ⚙️ Yapılandırma
+## ⚙️ Configuration
 
-### Environment Değişkenleri
+### Environment Variables
 
-`.env` dosyanızı aşağıdaki şekilde yapılandırın.  
-Her satır bir **anahtar = değer** çiftidir:
+Configure your `.env` file like this.  
+Each line is a **KEY = value** pair:
 
 ```env
 # WordPress API Configuration
@@ -153,172 +162,168 @@ NEXT_PUBLIC_SITE_NAME=ESUCODES
 ADMIN_SECRET_KEY=your_secret_key_here
 ```
 
-### Production Yapılandırması
+### Production Configuration
 
-Projeyi gerçek sunucuya (production) alırken farklı adresler kullanmak isterseniz, `.env.production` dosyası oluşturabilirsiniz:
+When you deploy to a real server (production), you will probably use different URLs.  
+You can create a `.env.production` file:
 
 ```env
 NEXT_PUBLIC_WORDPRESS_API_URL=https://your-wordpress-domain.com/wp-json/wp/v2
 NEXT_PUBLIC_SITE_URL=https://your-domain.com
 ```
 
-## 🔗 WordPress API Bağlantısı
+## 🔗 WordPress API Integration
 
-Bu bölüm, blog içeriklerini WordPress üzerinden çekmek isteyenler içindir.  
-Eğer WordPress kullanmak istemiyorsan, bu kısmı şimdilik atlayabilirsin.
+This part is only needed if you want to fetch content from a WordPress site.  
+If you do not want to use WordPress, you can skip this section for now.
 
-### 1. WordPress Kurulumu
+### 1. WordPress Setup
 
-- Bir WordPress sitesi kurun veya var olan sitenizi kullanın.
-- Siteniz çalışır durumda ve erişilebilir olmalı.
+- Install a WordPress site or use an existing one.
+- Make sure your site is running and accessible.
 
-### 2. Application Password Oluşturma
+### 2. Create an Application Password
 
-1. WordPress admin paneline giriş yapın
-2. **Kullanıcılar > Profiliniz** sayfasına gidin
-3. Sayfanın altında **"Application Passwords"** bölümünü bulun
-4. Yeni bir application password oluşturun
-5. Oluşturulan şifreyi `.env` dosyasındaki `NEXT_PUBLIC_WORDPRESS_AUTH_PASS` değişkenine ekleyin
+1. Log in to your WordPress admin panel.
+2. Go to **Users > Profile**.
+3. Scroll to the **Application Passwords** section.
+4. Create a new application password.
+5. Copy the generated password into `NEXT_PUBLIC_WORDPRESS_AUTH_PASS` in your `.env` file.
 
-### 3. REST API Testi
+### 3. Test the REST API
 
-WordPress REST API'nizin çalıştığını test edin:
+Check that your WordPress REST API is working:
 
 ```bash
 curl http://localhost:8080/wp-json/wp/v2/posts
 ```
 
-### 4. API Entegrasyonu
+### 4. API Integration in the Code
 
-Projede WordPress API'den veri çekmek için hazır bir yardımcı dosya bulunur: `lib/wordpress.ts`.  
-Bu dosya üzerinden postları, belirli kategorileri vb. çekebilirsiniz.
+This project uses a helper file `lib/wordpress.ts` to fetch data from the WordPress API.  
+You can extend it to fetch posts, categories, tags and more.
 
-## 💻 Geliştirme
+## 💻 Development
 
-### Komutlar
+### Scripts
 
 ```bash
-# Geliştirme sunucusu
+# Start development server
 npm run dev
 
-# Production build
+# Build for production
 npm run build
 
-# Production sunucusu
+# Start production server
 npm start
 
-# Linting
+# Run linting
 npm run lint
 ```
 
-### Kod Yapısı
+### Code Style
 
-- **Modüler Tasarım**: Her bileşen kendi dosyasında
-- **DRY Prensibi**: Tekrarlayan kod yok
-- **TypeScript**: Tip güvenliği için strict mode
-- **Component-based**: Yeniden kullanılabilir bileşenler
+- **Modular design**: Each component lives in its own file
+- **DRY principle**: Avoid duplicated logic
+- **TypeScript**: Strict typing for safer code
+- **Component‑based**: Reusable UI blocks
 
-## 📂 Proje Yapısı
+## 📂 Project Structure
 
-Aşağıda klasör ve dosyaların **ne işe yaradığını** kısaca görebilirsin:
+Here is a quick overview of the main folders and what they do:
 
 ```
 esucodes2.0/
-├── app/                    # Next.js App Router (sayfalar burada)
-│   ├── layout.tsx         # Tüm sayfalar için ortak tasarım (layout)
-│   ├── page.tsx           # Anasayfa
-│   ├── blog/              # Blog sayfaları
-│   ├── team/              # Ekip sayfaları
-│   ├── admin/             # Admin paneli
+├── app/                    # Next.js App Router (page entry points)
+│   ├── layout.tsx         # Root layout shared by all pages
+│   ├── page.tsx           # Home page
+│   ├── blog/              # Blog pages
+│   ├── team/              # Team pages
+│   ├── admin/             # Admin panel pages
 │   └── ...
-├── components/            # Tekrar kullanılabilir React bileşenleri
-│   ├── layout/           # Header, Footer gibi genel bileşenler
-│   ├── home/             # Anasayfa bileşenleri
-│   ├── blog/             # Blog bileşenleri
-│   ├── team/             # Ekip bileşenleri
-│   ├── admin/            # Admin bileşenleri
-│   ├── errors/           # Hata sayfaları
-│   └── easter-eggs/      # Eğlenceli gizli özellikler
-├── lib/                  # Yardımcı fonksiyonlar (WordPress vb.)
-├── public/               # Statik dosyalar (resimler, ikonlar)
-├── app/globals.css       # Global stil dosyası
+├── components/            # Reusable React components
+│   ├── layout/           # Header, footer, layout parts
+│   ├── home/             # Home page components
+│   ├── blog/             # Blog UI components
+│   ├── team/             # Team page components
+│   ├── admin/            # Admin UI components
+│   ├── errors/           # Error pages
+│   └── easter-eggs/      # Fun hidden features
+├── lib/                  # Helper utilities (WordPress, data, etc.)
+├── public/               # Static files (images, icons, fonts)
+├── app/globals.css       # Global styles
 └── ...
 ```
 
 ## 🎮 Easter Eggs
 
 ### 1. Konami Code
-`↑ ↑ ↓ ↓ ← → ← → B A` tuş kombinasyonunu yapınca gizli `/wormhole` sayfasına yönlendirilirsiniz.
+Enter `↑ ↑ ↓ ↓ ← → ← → B A` on your keyboard to be redirected to the secret `/wormhole` page.
 
-### 2. Console Mesajı
-F12 ile konsolu açtığınızda işe alım mesajı görürsünüz.
+### 2. Console Message
+Open the browser dev tools (F12) and check the console – you will see a hidden hiring message.
 
 ### 3. Logo Rage Click
-Header'daki logoya 5 kere hızlıca tıklayınca roket gibi yukarı uçar.
+Click the header logo 5 times quickly – it will “fly” upwards like a rocket.
 
 ### 4. Footer "Earth" Hover
-Footer'daki "Made on Earth" yazısının üzerine gelince "Mars" olarak değişir.
+Hover over the “Made on Earth” text in the footer – it changes to “Made on Mars”.
 
-### 5. Glitch Effect
-Ekip sayfasındaki "Siber Güvenlik" kartlarında hover efekti.
 
-### 6. Hacker Selection
-Metin seçildiğinde neon mor arka plan, neon cyan yazı rengi.
+## 🎨 Design System
 
-## 🎨 Tasarım Sistemi
-
-### Renk Paleti
+### Color Palette
 
 - **Backgrounds**: `bg-primary` (#0f172a), `bg-secondary` (#1e293b)
 - **Text**: `text-primary` (#f1f5f9), `text-secondary` (#cbd5e1)
 - **Accents**: `accent-primary` (#818cf8), `accent-tertiary` (#22d3ee)
 
-Detaylar için `tailwind.config.ts` dosyasına bakın.
+For more details, check `tailwind.config.ts`.
 
 ## 🚢 Deployment
 
-### Vercel (Önerilen)
+### Vercel (Recommended)
 
-1. GitHub'a push edin
-2. [Vercel](https://vercel.com) hesabınıza giriş yapın
-3. Yeni proje oluşturun
-4. GitHub repository'nizi seçin
-5. Environment değişkenlerini ekleyin
-6. Deploy edin
+1. Push your code to GitHub.
+2. Log in to [Vercel](https://vercel.com).
+3. Create a new project.
+4. Select your GitHub repository.
+5. Add your environment variables.
+6. Deploy.
 
 ### Netlify
 
-1. GitHub'a push edin
-2. [Netlify](https://netlify.com) hesabınıza giriş yapın
-3. Yeni site oluşturun
-4. Build komutu: `npm run build`
+1. Push your code to GitHub.
+2. Log in to [Netlify](https://netlify.com).
+3. Create a new site from Git.
+4. Build command: `npm run build`
 5. Publish directory: `.next`
-6. Environment değişkenlerini ekleyin
+6. Add your environment variables.
 
-## 📝 Notlar
+## 📝 Notes
 
-- WordPress API bağlantısı için CORS ayarlarını kontrol edin
-- Production'da HTTPS kullanın
-- Environment değişkenlerini asla commit etmeyin
-- `.env.local` dosyasını `.gitignore`'a ekleyin
+- Check CORS settings for your WordPress API if requests are blocked.
+- Always use HTTPS in production.
+- Never commit your real environment variables or `.env` file.
+- Make sure `.env.local` is in `.gitignore`.
 
-## 🤝 Katkıda Bulunma
+## 🤝 Contributing
 
-1. Fork edin
-2. Feature branch oluşturun (`git checkout -b feature/amazing-feature`)
-3. Commit edin (`git commit -m 'Add amazing feature'`)
-4. Push edin (`git push origin feature/amazing-feature`)
-5. Pull Request açın
+1. Fork the repository.
+2. Create a feature branch (`git checkout -b feature/amazing-feature`).
+3. Commit your changes (`git commit -m 'Add amazing feature'`).
+4. Push the branch (`git push origin feature/amazing-feature`).
+5. Open a Pull Request.
 
-## 📄 Lisans
+## 📄 License
 
-Bu proje özel bir projedir.
+This is a private / closed‑source project unless otherwise specified.
 
-## 👨‍💻 Geliştirici
+## 👨‍💻 Team
 
-ESUCODES Team - Explore Software Universe
+ESUCODES Team – Explore Software Universe
 
 ---
 
-**Made on Earth** (Hover: **Made on Mars** 🚀)
+**Made on Earth** (hover: **Made on Mars** 🚀)
 
