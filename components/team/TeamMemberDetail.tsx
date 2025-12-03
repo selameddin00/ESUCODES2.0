@@ -109,8 +109,16 @@ export default function TeamMemberDetail({ slug }: { slug: string }) {
           className="glass rounded-2xl p-8 mb-8"
         >
           <div className="flex flex-col md:flex-row items-center md:items-start space-y-6 md:space-y-0 md:space-x-8">
-            <div className="w-32 h-32 rounded-2xl bg-gradient-to-r from-accent-primary to-accent-tertiary flex items-center justify-center text-5xl font-bold">
-              {member.name.charAt(0)}
+            <div className="w-32 h-32 rounded-2xl overflow-hidden flex items-center justify-center bg-gradient-to-r from-accent-primary to-accent-tertiary text-5xl font-bold">
+              {member.avatar ? (
+                <img
+                  src={member.avatar}
+                  alt={member.name}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <span>{member.name.charAt(0)}</span>
+              )}
             </div>
             <div className="flex-1 text-center md:text-left">
               <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-accent-primary to-accent-tertiary bg-clip-text text-transparent">

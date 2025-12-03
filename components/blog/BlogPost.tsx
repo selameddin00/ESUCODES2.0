@@ -16,6 +16,8 @@ interface Post {
   date: string
   readTime: string
   category: string
+  image?: string
+  hasAuthor: boolean
 }
 
 interface RelatedPost {
@@ -45,13 +47,11 @@ const authenticate = async (user) => {
     <h2>Cloud Security</h2>
     <p>Bulut güvenliği, modern işletmeler için en önemli önceliklerden biri haline geldi. Shared responsibility model'i anlamak ve doğru güvenlik politikaları uygulamak kritik.</p>
   `,
-  author: {
-    name: 'ESUCODES Team',
-    avatar: '/avatar.jpg',
-  },
+  author: null,
   date: '2025-01-15',
   readTime: '5 dk',
   category: 'Cyber Security',
+  hasAuthor: false,
 }
 
 const relatedPosts = [
@@ -80,23 +80,36 @@ export default function BlogPost({ slug }: { slug: string }) {
         if (wpPost) {
           const wordCount = wpPost.content.rendered.replace(/<[^>]*>/g, '').split(/\s+/).length
           const readTime = Math.ceil(wordCount / 200)
+          const wpAuthor = wpPost._embedded?.author?.[0]
+          const hasAuthor = !!wpAuthor?.name
+          const authorName = wpAuthor?.name || ''
+          const authorAvatar =
+            (wpAuthor?.avatar_urls &&
+              (wpAuthor.avatar_urls['96'] ||
+                wpAuthor.avatar_urls['48'] ||
+                wpAuthor.avatar_urls['24'])) ||
+            ''
 
           const transformedPost: Post = {
             title: wpPost.title.rendered,
             content: wpPost.content.rendered,
             author: {
-              name: 'ESUCODES Team',
-              avatar: '/avatar.jpg',
+              name: authorName,
+              avatar: authorAvatar,
             },
             date: wpPost.date,
             readTime: `${readTime} dk`,
             category: 'Blog',
+            image:
+              wpPost._embedded?.['wp:featuredmedia']?.[0]?.source_url ||
+              undefined,
+            hasAuthor,
           }
 
           setPost(transformedPost)
 
           // İlgili yazıları çek
-          const allPosts = await getPosts({ per_page: 5 })
+          const { posts: allPosts } = await getPosts({ per_page: 5 })
           const related = allPosts
             .filter((p: WordPressPost) => p.id !== wpPost.id)
             .slice(0, 2)
@@ -107,7 +120,7 @@ export default function BlogPost({ slug }: { slug: string }) {
           setRelatedPosts(related)
         } else {
           // WordPress'ten veri gelmezse mock data kullan
-          setPost(mockPost)
+          setPost(mockPost as unknown as Post)
           setRelatedPosts([
             { slug: 'ai-ve-gelecek', title: 'Yapay Zeka ve Yazılım Geliştirme' },
             { slug: 'nextjs-14-rehber', title: 'Next.js 14 App Router Rehberi' },
@@ -116,7 +129,7 @@ export default function BlogPost({ slug }: { slug: string }) {
       } catch (error) {
         console.error('Error fetching post:', error)
         // Hata durumunda mock data kullan
-        setPost(mockPost)
+        setPost(mockPost as unknown as Post)
         setRelatedPosts([
           { slug: 'ai-ve-gelecek', title: 'Yapay Zeka ve Yazılım Geliştirme' },
           { slug: 'nextjs-14-rehber', title: 'Next.js 14 App Router Rehberi' },
@@ -191,38 +204,49 @@ export default function BlogPost({ slug }: { slug: string }) {
             transition={{ duration: 0.5 }}
             className="lg:col-span-2"
           >
-            <div className="glass rounded-2xl p-8 md:p-10">
-              <div className="mb-6">
+            <div className="glass rounded-2xl overflow-hidden">
+              {post.image && (
+                <div className="w-full h-72 md:h-96 overflow-hidden border-b border-white/10">
+                  <img
+                    src={post.image}
+                    alt={post.title}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              )}
+
+              <div className="p-8 md:p-10">
+                <div className="mb-6">
                 <span className="px-3 py-1 bg-accent-primary/20 text-accent-primary rounded-full text-sm font-semibold">
                   {post.category}
                 </span>
-              </div>
-
-              <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-accent-primary to-accent-tertiary bg-clip-text text-transparent">
-                {post.title}
-              </h1>
-
-              <div className="flex flex-wrap items-center gap-4 text-text-muted text-sm mb-8 pb-8 border-b border-white/10">
-                <div className="flex items-center space-x-2">
-                  <Calendar className="w-4 h-4" />
-                  <span>{new Date(post.date).toLocaleDateString('tr-TR')}</span>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <Clock className="w-4 h-4" />
-                  <span>{post.readTime} okuma süresi</span>
-                </div>
-                <button
-                  onClick={handleShare}
-                  className="flex items-center space-x-2 hover:text-accent-primary transition-colors"
-                >
-                  <Share2 className="w-4 h-4" />
-                  <span>Paylaş</span>
-                </button>
-              </div>
 
-              {/* Article Content */}
-              <div
-                className="
+                <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-accent-primary to-accent-tertiary bg-clip-text text-transparent">
+                  {post.title}
+                </h1>
+
+                <div className="flex flex-wrap items-center gap-4 text-text-muted text-sm mb-8 pb-8 border-b border-white/10">
+                  <div className="flex items-center space-x-2">
+                    <Calendar className="w-4 h-4" />
+                    <span>{new Date(post.date).toLocaleDateString('tr-TR')}</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Clock className="w-4 h-4" />
+                    <span>{post.readTime} okuma süresi</span>
+                  </div>
+                  <button
+                    onClick={handleShare}
+                    className="flex items-center space-x-2 hover:text-accent-primary transition-colors"
+                  >
+                    <Share2 className="w-4 h-4" />
+                    <span>Paylaş</span>
+                  </button>
+                </div>
+
+                {/* Article Content */}
+                <div
+                  className="
                 prose prose-lg prose-invert max-w-none
                 prose-headings:text-text-primary prose-headings:font-bold
                 prose-p:text-text-secondary prose-p:leading-relaxed
@@ -244,43 +268,43 @@ export default function BlogPost({ slug }: { slug: string }) {
                 prose-pre:border prose-pre:border-white/10
                 prose-pre:shadow-xl
             "
-                dangerouslySetInnerHTML={{ __html: post.content }}
-              />
+                  dangerouslySetInnerHTML={{ __html: post.content }}
+                />
+              </div>
             </div>
           </motion.article>
 
           {/* Sidebar - Right Side (1 column) */}
           <aside className="lg:col-span-1 space-y-6">
-            {/* Author Card */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="glass rounded-2xl p-6"
-            >
-              <h3 className="text-lg font-bold text-text-primary mb-4">
-                Yazar
-              </h3>
-              <div className="flex flex-col items-center text-center">
-                <div className="w-20 h-20 rounded-full bg-gradient-to-r from-accent-primary to-accent-tertiary flex items-center justify-center text-3xl font-bold mb-4">
-                  {post.author.name.charAt(0)}
+            {/* Author Card (sadece gerçek yazar bilgisi varsa göster) */}
+            {post.hasAuthor && post.author.name && (
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="glass rounded-2xl p-6"
+              >
+                <h3 className="text-lg font-bold text-text-primary mb-4">
+                  Yazar
+                </h3>
+                <div className="flex flex-col items-center text-center">
+                  <div className="w-20 h-20 rounded-full overflow-hidden bg-gradient-to-r from-accent-primary to-accent-tertiary flex items-center justify-center text-3xl font-bold mb-4">
+                    {post.author.avatar ? (
+                      <img
+                        src={post.author.avatar}
+                        alt={post.author.name}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <span>{post.author.name.charAt(0)}</span>
+                    )}
+                  </div>
+                  <h4 className="text-xl font-bold text-text-primary mb-2">
+                    {post.author.name}
+                  </h4>
                 </div>
-                <h4 className="text-xl font-bold text-text-primary mb-2">
-                  {post.author.name}
-                </h4>
-                <p className="text-text-secondary text-sm mb-4">
-                  ESUCODES Ekibi Üyesi
-                </p>
-                <div className="flex space-x-3 pt-4 border-t border-white/10 w-full justify-center">
-                  <a
-                    href="/contact"
-                    className="px-4 py-2 glass rounded-lg text-accent-primary hover:bg-accent-primary hover:text-bg-primary transition-all duration-300 text-sm font-semibold"
-                  >
-                    Bağlantı Kur
-                  </a>
-                </div>
-              </div>
-            </motion.div>
+              </motion.div>
+            )}
 
             {/* Related Posts Card */}
             <motion.div

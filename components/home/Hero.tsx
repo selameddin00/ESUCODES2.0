@@ -1,9 +1,11 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 
 export default function Hero() {
+  const router = useRouter()
   const [displayText, setDisplayText] = useState('')
   const fullText = 'ESUCODES'
   const slogan = 'Explore Software Universe'
@@ -83,6 +85,7 @@ export default function Hero() {
             className="px-8 py-4 glass rounded-xl text-accent-primary hover:bg-accent-primary hover:text-bg-primary transition-all duration-300 font-semibold"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
+            onClick={() => router.push('/blog')}
           >
             Keşfetmeye Başla
           </motion.button>

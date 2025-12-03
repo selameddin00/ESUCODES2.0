@@ -37,11 +37,17 @@ export default function TeamGrid() {
               >
                 {/* Avatar */}
                 <div className="relative mb-4">
-                  <div
-                    className="w-24 h-24 rounded-xl mx-auto bg-gradient-to-r from-accent-primary to-accent-tertiary flex items-center justify-center text-3xl font-bold"
-                  >
-                    {member.name.charAt(0)}
-                  </div>
+                  {member.avatar ? (
+                    <img
+                      src={member.avatar}
+                      alt={member.name}
+                      className="w-24 h-24 rounded-xl mx-auto object-cover border border-white/10 shadow-lg"
+                    />
+                  ) : (
+                    <div className="w-24 h-24 rounded-xl mx-auto bg-gradient-to-r from-accent-primary to-accent-tertiary flex items-center justify-center text-3xl font-bold">
+                      {member.name.charAt(0)}
+                    </div>
+                  )}
                   {member.effect === 'matrix' && (
                     <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity">
                       <div className="text-xs font-mono text-accent-tertiary text-center">

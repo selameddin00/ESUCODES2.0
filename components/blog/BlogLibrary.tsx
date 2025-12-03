@@ -6,6 +6,8 @@ import { motion } from 'framer-motion'
 import { Search, Calendar } from 'lucide-react'
 import { getPosts, getCategories, type WordPressPost, type WordPressCategory } from '@/lib/wordpress'
 
+const POSTS_PER_PAGE = 12
+
 interface Post {
   id: number
   slug: string
@@ -13,6 +15,7 @@ interface Post {
   excerpt: string
   date: string
   category: string
+  thumbnailUrl?: string
 }
 
 export default function BlogLibrary() {
@@ -22,6 +25,8 @@ export default function BlogLibrary() {
   const [categories, setCategories] = useState<string[]>(['Tümü'])
   const [loading, setLoading] = useState(true)
   const [wpCategories, setWpCategories] = useState<WordPressCategory[]>([])
+  const [currentPage, setCurrentPage] = useState(1)
+  const [totalPages, setTotalPages] = useState(1)
 
   // WordPress'ten veri çek
   useEffect(() => {
@@ -30,13 +35,14 @@ export default function BlogLibrary() {
         setLoading(true)
         console.log('WordPress API URL:', process.env.NEXT_PUBLIC_WORDPRESS_API_URL)
         
-        const [posts, cats] = await Promise.all([
-          getPosts({ per_page: 100 }),
+        const [{ posts, totalPages }, cats] = await Promise.all([
+          getPosts({ per_page: POSTS_PER_PAGE, page: currentPage }),
           getCategories(),
         ])
 
         console.log('Fetched posts:', posts.length)
         console.log('Fetched categories:', cats.length)
+        console.log('Total pages:', totalPages)
 
         if (posts.length === 0) {
           console.warn('WordPress\'ten hiç yazı gelmedi. WordPress\'te yazı olduğundan emin olun.')
@@ -50,6 +56,10 @@ export default function BlogLibrary() {
             .trim()
             .substring(0, 150)
 
+          // Öne çıkan görseli al (featured image)
+          const thumbnailUrl =
+            post._embedded?.['wp:featuredmedia']?.[0]?.source_url || undefined
+
           // İlk kategoriyi al
           const categoryId = post.categories?.[0]
           const category = cats.find((c) => c.id === categoryId)?.name || 'Uncategorized'
@@ -61,10 +71,12 @@ export default function BlogLibrary() {
             excerpt: excerptText + (excerptText.length >= 150 ? '...' : ''),
             date: post.date,
             category,
+            thumbnailUrl,
           }
         })
 
         setAllPosts(transformedPosts)
+        setTotalPages(totalPages)
 
         // Kategorileri ayarla
         const categoryNames = ['Tümü', ...cats.map((c) => c.name)]
@@ -81,7 +93,7 @@ export default function BlogLibrary() {
     }
 
     fetchData()
-  }, [])
+  }, [currentPage])
 
   const filteredPosts = allPosts.filter((post) => {
     const matchesSearch =
@@ -91,6 +103,16 @@ export default function BlogLibrary() {
       selectedCategory === 'Tümü' || post.category === selectedCategory
     return matchesSearch && matchesCategory
   })
+
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategory(category)
+    setCurrentPage(1)
+  }
+
+  const handleSearchChange = (value: string) => {
+    setSearchQuery(value)
+    setCurrentPage(1)
+  }
 
   if (loading) {
     return (
@@ -123,7 +145,7 @@ export default function BlogLibrary() {
             type="text"
             placeholder="Search the universe..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) => handleSearchChange(e.target.value)}
             className="w-full pl-12 pr-4 py-4 glass rounded-xl text-text-primary placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-accent-primary"
           />
         </div>
@@ -134,7 +156,7 @@ export default function BlogLibrary() {
         {categories.map((category) => (
           <button
             key={category}
-            onClick={() => setSelectedCategory(category)}
+            onClick={() => handleCategoryChange(category)}
             className={`px-6 py-2 rounded-full font-semibold transition-all duration-300 ${
               selectedCategory === category
                 ? 'bg-accent-primary text-bg-primary'
@@ -147,7 +169,7 @@ export default function BlogLibrary() {
       </div>
 
       {/* Posts Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-10">
         {filteredPosts.map((post, index) => (
           <motion.div
             key={post.id}
@@ -159,30 +181,76 @@ export default function BlogLibrary() {
             className="group"
           >
             <Link href={`/blog/${post.slug}`}>
-              <div className="glass rounded-2xl p-6 h-full flex flex-col hover:bg-bg-tertiary transition-all duration-300">
-                <div className="mb-4">
+              <div className="glass rounded-2xl h-full flex flex-col hover:bg-bg-tertiary transition-all duration-300 overflow-hidden">
+                {post.thumbnailUrl && (
+                  <div className="w-full h-44 overflow-hidden border-b border-white/10">
+                    <img
+                      src={post.thumbnailUrl}
+                      alt={post.title}
+                      className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
+                    />
+                  </div>
+                )}
+
+                <div className="p-6 flex flex-col flex-1">
+                  <div className="mb-4">
                   <span className="px-3 py-1 bg-accent-primary/20 text-accent-primary rounded-full text-xs font-semibold">
                     {post.category}
                   </span>
-                </div>
+                  </div>
 
-                <h3 className="text-xl font-bold mb-3 text-text-primary group-hover:text-accent-primary transition-colors">
-                  {post.title}
-                </h3>
+                  <h3 className="text-xl font-bold mb-3 text-text-primary group-hover:text-accent-primary transition-colors">
+                    {post.title}
+                  </h3>
 
-                <p className="text-text-secondary text-sm mb-4 flex-grow">
-                  {post.excerpt}
-                </p>
+                  <p className="text-text-secondary text-sm mb-4 flex-grow">
+                    {post.excerpt}
+                  </p>
 
-                <div className="flex items-center space-x-2 text-text-muted text-xs pt-4 border-t border-white/10">
-                  <Calendar className="w-4 h-4" />
-                  <span>{new Date(post.date).toLocaleDateString('tr-TR')}</span>
+                  <div className="flex items-center space-x-2 text-text-muted text-xs pt-4 border-t border-white/10 mt-auto">
+                    <Calendar className="w-4 h-4" />
+                    <span>{new Date(post.date).toLocaleDateString('tr-TR')}</span>
+                  </div>
                 </div>
               </div>
             </Link>
           </motion.div>
         ))}
       </div>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="flex items-center justify-center space-x-4 mt-4">
+          <button
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+            className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 ${
+              currentPage === 1
+                ? 'glass text-text-muted cursor-not-allowed opacity-60'
+                : 'glass hover:text-accent-primary'
+            }`}
+          >
+            Önceki
+          </button>
+
+          <span className="text-text-secondary text-sm">
+            Sayfa <span className="font-semibold">{currentPage}</span> /{' '}
+            <span className="font-semibold">{totalPages}</span>
+          </span>
+
+          <button
+            disabled={currentPage === totalPages}
+            onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+            className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 ${
+              currentPage === totalPages
+                ? 'glass text-text-muted cursor-not-allowed opacity-60'
+                : 'glass hover:text-accent-primary'
+            }`}
+          >
+            Sonraki
+          </button>
+        </div>
+      )}
 
       {filteredPosts.length === 0 && !loading && (
         <div className="text-center py-20">

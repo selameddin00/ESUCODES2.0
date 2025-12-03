@@ -22,7 +22,7 @@ export default function LatestLogs() {
   useEffect(() => {
     const fetchLatestPosts = async () => {
       try {
-        const posts = await getPosts({ per_page: 3 })
+        const { posts } = await getPosts({ per_page: 3 })
         
         // Posts'u dönüştür
         const transformedPosts: Post[] = posts.map((post: WordPressPost) => {

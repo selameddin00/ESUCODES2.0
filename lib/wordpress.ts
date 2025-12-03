@@ -21,6 +21,7 @@ const getAuthHeader = () => {
 export interface WordPressPost {
   id: number
   slug: string
+  author: number
   title: {
     rendered: string
   }
@@ -37,6 +38,15 @@ export interface WordPressPost {
     'wp:featuredmedia'?: Array<{
       source_url: string
     }>
+    author?: Array<{
+      name: string
+      avatar_urls?: {
+        24: string
+        48: string
+        96: string
+        [key: string]: string
+      }
+    }>
   }
 }
 
@@ -48,6 +58,7 @@ export interface WordPressCategory {
 
 /**
  * Tüm blog yazılarını getir
+ * WordPress total pages bilgisini de döner
  */
 export async function getPosts(
   params?: {
@@ -56,11 +67,11 @@ export async function getPosts(
     categories?: number
     search?: string
   }
-): Promise<WordPressPost[]> {
+): Promise<{ posts: WordPressPost[]; totalPages: number }> {
   try {
     if (!WORDPRESS_API_URL) {
       console.error('WordPress API URL is not configured. Please check your .env file.')
-      return []
+      return { posts: [], totalPages: 1 }
     }
 
     const queryParams = new URLSearchParams()
@@ -84,13 +95,16 @@ export async function getPosts(
     }
 
     const data = await response.json()
-    return data
+    const totalPagesHeader = response.headers.get('X-WP-TotalPages')
+    const totalPages = totalPagesHeader ? parseInt(totalPagesHeader, 10) || 1 : 1
+
+    return { posts: data, totalPages }
   } catch (error) {
     console.error('Error fetching posts:', error)
     if (error instanceof TypeError && error.message.includes('fetch')) {
       console.error('Network error: WordPress API\'ye erişilemiyor. URL\'yi kontrol edin.')
     }
-    return []
+    return { posts: [], totalPages: 1 }
   }
 }
 
