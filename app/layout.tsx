@@ -23,9 +23,7 @@ export default function RootLayout({
           <ConsoleHiring />
           <ScrollProgress />
           <ConditionalHeaderFooter>
-            <main className="min-h-screen">
-              {children}
-            </main>
+            {children}
           </ConditionalHeaderFooter>
         </KonamiCodeProvider>
       </body>

@@ -11,12 +11,15 @@ export default function ConditionalHeaderFooter({
 }) {
   const pathname = usePathname()
   const isRoboticsPage = pathname?.startsWith('/robotics')
+  const isAIPage = pathname?.startsWith('/ai')
 
   return (
     <>
-      {!isRoboticsPage && <Header />}
-      {children}
-      {!isRoboticsPage && <Footer />}
+      {!isRoboticsPage && !isAIPage && <Header />}
+      <main className={`min-h-screen ${isAIPage ? 'bg-black' : ''}`}>
+        {children}
+      </main>
+      {!isRoboticsPage && !isAIPage && <Footer />}
     </>
   )
 }

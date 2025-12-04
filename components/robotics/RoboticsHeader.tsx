@@ -43,7 +43,8 @@ export default function RoboticsHeader() {
                 whileTap={{ scale: 0.95 }}
               >
                 <Brain className="w-4 h-4" />
-                <span>AI</span>
+                <span className="group-hover:hidden">AI</span>
+                <span className="hidden group-hover:inline">THE_CORE</span>
               </motion.div>
             </Link>
 
