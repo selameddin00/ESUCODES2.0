@@ -4,7 +4,7 @@ import { useEffect, useState, MouseEvent } from 'react'
 import { motion } from 'framer-motion'
 
 // Matrix benzeri karakter havuzu - sayılar, harfler ve bazı semboller
-const MATRIX_CHARS = '01ABCDEFGHIJKLMNOPQRSTUVWXYZ#$%@+=-*<>[]{}'
+const MATRIX_CHARS = 'TAGC'
 
 function generateColumnChars(length: number) {
   return Array.from({ length }).map(

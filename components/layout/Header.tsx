@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { Terminal, Bot, Brain } from 'lucide-react'
+import { Terminal, Bot, Brain, Gamepad2 } from 'lucide-react'
 import { motion } from 'framer-motion'
 
 export default function Header() {
@@ -42,7 +42,7 @@ export default function Header() {
           <Link href="/" className="flex items-center space-x-2">
             <motion.div
               onClick={handleLogoClick}
-              className={`text-2xl font-bold bg-gradient-to-r from-accent-primary to-accent-tertiary bg-clip-text text-transparent cursor-pointer select-none ${
+              className={`text-xl md:text-2xl font-bold bg-gradient-to-r from-accent-primary to-accent-tertiary bg-clip-text text-transparent cursor-pointer select-none ${
                 isRocket ? 'rocket-launch' : ''
               }`}
               whileHover={{ scale: 1.05 }}
@@ -91,6 +91,19 @@ export default function Header() {
                 <Brain className="w-4 h-4" />
                 <span className="group-hover:hidden">AI</span>
                 <span className="hidden group-hover:inline">THE_CORE</span>
+              </motion.div>
+            </Link>
+
+            {/* Games Card */}
+            <Link href="/games">
+              <motion.div
+                className="hidden md:flex items-center space-x-2 px-3 py-2 bg-gradient-to-r from-cyan-500/20 via-purple-500/20 to-orange-500/20 border border-cyan-400/30 rounded-lg font-mono text-xs text-cyan-400 hover:border-cyan-400 hover:bg-gradient-to-r hover:from-cyan-500/30 hover:via-purple-500/30 hover:to-orange-500/30 transition-all duration-300 group cursor-pointer"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <Gamepad2 className="w-4 h-4" />
+                <span className="group-hover:hidden">GAMES</span>
+                <span className="hidden group-hover:inline">THE_ARENA</span>
               </motion.div>
             </Link>
 

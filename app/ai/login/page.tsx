@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Terminal, Lock, Brain, Cpu, Network, Shield, Code2 } from 'lucide-react'
+import { Brain, Zap, Sparkles, Atom, Cpu, Network, Lock } from 'lucide-react'
 import { loginWithWordPress } from '@/actions/wp-auth'
 
 export default function AILogin() {
@@ -12,253 +12,271 @@ export default function AILogin() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const [typingText, setTypingText] = useState('')
-  const [isTyping, setIsTyping] = useState(true)
-  const [systemLogs, setSystemLogs] = useState<string[]>([])
   const [neuralLayers, setNeuralLayers] = useState<number[]>([])
-
-  const fullText = '[SYSTEM] INITIALIZING NEURAL AUTHENTICATION PROTOCOL v2.4.1...'
+  const [particles, setParticles] = useState<Array<{ id: number; x: number; y: number }>>([])
 
   // Neural network layer visualization
   useEffect(() => {
-    const layers = [8, 12, 16, 12, 8]
+    const layers = [6, 10, 14, 10, 6]
     setNeuralLayers(layers)
   }, [])
 
-  // System logs simulation
+  // Floating particles
   useEffect(() => {
-    const logs = [
-      '[BOOT] Loading authentication modules...',
-      '[NETWORK] Establishing secure connection...',
-      '[CRYPTO] Initializing encryption protocols...',
-      '[AI] Neural network ready',
-      '[AUTH] Waiting for credentials...',
-    ]
-    
-    let logIndex = 0
-    const logInterval = setInterval(() => {
-      if (logIndex < logs.length) {
-        setSystemLogs((prev) => [...prev, logs[logIndex]])
-        logIndex++
-      }
-    }, 800)
-
-    return () => clearInterval(logInterval)
-  }, [])
-
-  useEffect(() => {
-    let currentIndex = 0
-    const interval = setInterval(() => {
-      if (currentIndex < fullText.length) {
-        setTypingText(fullText.slice(0, currentIndex + 1))
-        currentIndex++
-      } else {
-        setIsTyping(false)
-        clearInterval(interval)
-      }
-    }, 30)
-
-    return () => clearInterval(interval)
+    const newParticles = Array.from({ length: 50 }).map((_, i) => ({
+      id: i,
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+    }))
+    setParticles(newParticles)
   }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
     setIsLoading(true)
-    setSystemLogs((prev) => [...prev, '[AUTH] Validating credentials...'])
-    setSystemLogs((prev) => [...prev, '[API] POST /wp-json/wp/v2/users/me'])
 
     try {
       const result = await loginWithWordPress(username, password)
 
       if (result.success) {
-        setSystemLogs((prev) => [...prev, '[SUCCESS] Authentication successful'])
-        setSystemLogs((prev) => [...prev, '[SESSION] Token generated'])
         localStorage.setItem('admin_token', 'wp_admin')
         setTimeout(() => {
           router.push('/ai')
         }, 500)
       } else {
         setError(result.error || 'ACCESS DENIED')
-        setSystemLogs((prev) => [...prev, '[ERROR] Authentication failed'])
         setIsLoading(false)
       }
     } catch (err) {
       console.error(err)
       setError('LOGIN FAILED')
-      setSystemLogs((prev) => [...prev, '[ERROR] System exception occurred'])
       setIsLoading(false)
     }
   }
 
-  // Matrix-like characters for background
-  const matrixChars = '01ABCDEFGHIJKLMNOPQRSTUVWXYZ#$%@+-=*<>[]{}'
-
   return (
     <div className="min-h-screen flex items-center justify-center px-4 bg-black relative overflow-hidden">
-      {/* Matrix background effect */}
-      <div className="absolute inset-0 opacity-20 pointer-events-none">
-        {Array.from({ length: 20 }).map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute font-mono text-xs text-white/30"
+      {/* Neural Network Background Visualization */}
+      <div className="absolute inset-0 opacity-10 pointer-events-none">
+        {neuralLayers.map((nodeCount, layerIndex) => (
+          <div
+            key={layerIndex}
+            className="absolute top-1/2"
             style={{
-              left: `${(i * 5) % 100}%`,
-              top: `${-20 + (i * 3) % 100}%`,
-            }}
-            animate={{
-              y: ['0vh', '100vh'],
-              opacity: [0, 0.3, 0],
-            }}
-            transition={{
-              duration: Math.random() * 3 + 2,
-              repeat: Infinity,
-              delay: Math.random() * 2,
+              left: `${25 + layerIndex * 15}%`,
+              transform: 'translateY(-50%)',
             }}
           >
-            {Array.from({ length: 30 }).map((_, j) => (
-              <div key={j} className="whitespace-pre">
-                {matrixChars[Math.floor(Math.random() * matrixChars.length)]}
+            {Array.from({ length: nodeCount }).map((_, nodeIndex) => {
+              const nodeY = ((nodeIndex / (nodeCount - 1 || 1)) * 2 - 1) * 200
+              return (
+                <motion.div
+                  key={nodeIndex}
+                  className="absolute w-3 h-3 bg-white rounded-full"
+                  style={{
+                    top: `${nodeY + 200}px`,
+                    left: '0px',
+                    boxShadow: '0 0 10px rgba(255,255,255,0.5)',
+                  }}
+                  animate={{
+                    scale: [1, 1.8, 1],
+                    opacity: [0.2, 0.9, 0.2],
+                  }}
+                  transition={{
+                    duration: 2 + Math.random(),
+                    repeat: Infinity,
+                    delay: Math.random() * 2,
+                  }}
+                />
+              )
+            })}
+          </div>
+        ))}
+      </div>
+
+      {/* Floating Neural Particles */}
+      <div className="absolute inset-0 opacity-30 pointer-events-none">
+        {particles.map((particle) => (
+          <motion.div
+            key={particle.id}
+            className="absolute w-1 h-1 bg-white rounded-full"
+            style={{
+              left: `${particle.x}%`,
+              top: `${particle.y}%`,
+            }}
+            animate={{
+              y: [0, -30, 0],
+              opacity: [0.2, 1, 0.2],
+              scale: [1, 1.5, 1],
+            }}
+            transition={{
+              duration: 3 + Math.random() * 2,
+              repeat: Infinity,
+              delay: Math.random() * 3,
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Matrix Code Rain */}
+      <div className="absolute inset-0 opacity-5 pointer-events-none">
+        {Array.from({ length: 15 }).map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute font-mono text-xs text-white/20"
+            style={{
+              left: `${(i * 7) % 100}%`,
+            }}
+            animate={{
+              y: ['-10vh', '110vh'],
+            }}
+            transition={{
+              duration: 5 + Math.random() * 5,
+              repeat: Infinity,
+              delay: Math.random() * 3,
+              ease: 'linear',
+            }}
+          >
+            {Array.from({ length: 20 }).map((_, j) => (
+              <div key={j} className="whitespace-pre text-green-400/30">
+                {Math.random().toString(36).substring(2, 3).toUpperCase()}
               </div>
             ))}
           </motion.div>
         ))}
       </div>
 
-      {/* Neural Network Visualization */}
-      <div className="absolute inset-0 opacity-5 pointer-events-none">
-        {neuralLayers.map((nodeCount, layerIndex) => (
-          <div
-            key={layerIndex}
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-            style={{
-              transform: `translate(-50%, -50%) translateX(${(layerIndex - 2) * 200}px)`,
-            }}
-          >
-            {Array.from({ length: nodeCount }).map((_, nodeIndex) => (
-              <motion.div
-                key={nodeIndex}
-                className="absolute w-2 h-2 bg-white rounded-full"
-                style={{
-                  top: `${(nodeIndex / (nodeCount - 1)) * 300 - 150}px`,
-                  left: '0px',
-                }}
-                animate={{
-                  scale: [1, 1.5, 1],
-                  opacity: [0.3, 0.8, 0.3],
-                }}
-                transition={{
-                  duration: 2 + Math.random(),
-                  repeat: Infinity,
-                  delay: Math.random() * 2,
-                }}
-              />
-            ))}
-          </div>
-        ))}
-      </div>
-
       <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        className="w-full max-w-4xl relative z-10"
+        initial={{ opacity: 0, scale: 0.9, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="w-full max-w-md relative z-10"
       >
-        <div className="border border-white/30 bg-black/90 backdrop-blur-xl p-0 relative overflow-hidden font-mono">
-          {/* Terminal Header */}
-          <div className="bg-white/5 border-b border-white/10 px-6 py-3 flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="flex space-x-2">
-                <div className="w-3 h-3 rounded-full bg-red-500" />
-                <div className="w-3 h-3 rounded-full bg-yellow-500" />
-                <div className="w-3 h-3 rounded-full bg-green-500" />
-              </div>
-              <div className="text-white/60 text-xs">
-                <Terminal className="w-4 h-4 inline mr-2" />
-                AI_CORE_TERMINAL v2.4.1
-              </div>
-            </div>
-            <div className="flex items-center space-x-4 text-xs text-white/40">
-              <div className="flex items-center space-x-1">
-                <Cpu className="w-3 h-3" />
-                <span>CPU: 12.4%</span>
-              </div>
-              <div className="flex items-center space-x-1">
-                <Network className="w-3 h-3" />
-                <span>NET: OK</span>
-              </div>
-              <div className="flex items-center space-x-1">
-                <Shield className="w-3 h-3" />
-                <span>SEC: ACTIVE</span>
-              </div>
-            </div>
-          </div>
+        <div className="relative">
+          {/* Glow Effect */}
+          <div className="absolute inset-0 bg-white/10 rounded-3xl blur-3xl -z-10" />
 
-          <div className="p-8">
+          {/* Main Card */}
+          <div className="bg-black/90 backdrop-blur-xl border border-white/20 rounded-3xl p-8 relative overflow-hidden">
+            {/* Animated Border */}
+            <motion.div
+              className="absolute inset-0 rounded-3xl"
+              style={{
+                background: 'linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent)',
+              }}
+              animate={{
+                rotate: 360,
+              }}
+              transition={{
+                duration: 10,
+                repeat: Infinity,
+                ease: 'linear',
+              }}
+            />
 
-            {/* System Logs Terminal */}
-            <div className="mb-6 bg-black/50 border border-white/10 p-4 rounded font-mono text-xs">
-              <div className="text-white/40 mb-2 flex items-center space-x-2">
-                <Code2 className="w-3 h-3" />
-                <span>SYSTEM LOGS</span>
-              </div>
-              <div className="space-y-1 max-h-32 overflow-y-auto">
-                {systemLogs.map((log, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    className="text-white/60"
-                  >
-                    <span className="text-white/40">$ </span>
-                    {log}
-                  </motion.div>
-                ))}
-                {isTyping && (
-                  <div className="text-white/60">
-                    <span className="text-white/40">$ </span>
-                    {typingText}
-                    <span className="animate-pulse text-white">|</span>
-                  </div>
-                )}
-              </div>
-            </div>
+            {/* Corner Decorations */}
+            <div className="absolute top-4 left-4 w-6 h-6 border-t-2 border-l-2 border-white/50 rounded-tl-lg" />
+            <div className="absolute top-4 right-4 w-6 h-6 border-t-2 border-r-2 border-white/50 rounded-tr-lg" />
+            <div className="absolute bottom-4 left-4 w-6 h-6 border-b-2 border-l-2 border-white/50 rounded-bl-lg" />
+            <div className="absolute bottom-4 right-4 w-6 h-6 border-b-2 border-r-2 border-white/50 rounded-br-lg" />
 
             {/* Header */}
-            <div className="text-center mb-8">
-              <div className="flex items-center justify-center space-x-4 mb-4">
-                <motion.div
-                  className="w-12 h-12 rounded border-2 border-white flex items-center justify-center"
-                  animate={{
-                    scale: [1, 1.1, 1],
-                    borderColor: ['rgba(255,255,255,1)', 'rgba(255,255,255,0.5)', 'rgba(255,255,255,1)'],
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                  }}
-                >
-                  <Brain className="w-6 h-6 text-white" />
-                </motion.div>
-                <div>
-                  <h1 className="text-2xl font-bold text-white tracking-wider font-mono">
-                    NEURAL AUTHENTICATION
-                  </h1>
-                  <p className="text-white/40 text-xs mt-1">ESUCODES AI CORE v2.4.1</p>
+            <div className="text-center mb-8 relative z-10">
+              <motion.div
+                initial={{ scale: 0, rotate: -180 }}
+                animate={{ scale: 1, rotate: 0 }}
+                transition={{ delay: 0.2, type: 'spring' }}
+                className="mb-6"
+              >
+                <div className="relative inline-block">
+                  <motion.div
+                    className="w-20 h-20 rounded-full bg-white/10 border-2 border-white/30 flex items-center justify-center mx-auto backdrop-blur-sm"
+                    animate={{
+                      rotate: [0, 360],
+                      boxShadow: [
+                        '0 0 20px rgba(255,255,255,0.3)',
+                        '0 0 40px rgba(255,255,255,0.5)',
+                        '0 0 20px rgba(255,255,255,0.3)',
+                      ],
+                    }}
+                    transition={{
+                      rotate: {
+                        duration: 20,
+                        repeat: Infinity,
+                        ease: 'linear',
+                      },
+                      boxShadow: {
+                        duration: 3,
+                        repeat: Infinity,
+                      },
+                    }}
+                  >
+                    <Brain className="w-10 h-10 text-white" />
+                  </motion.div>
+                  
+                  {/* Orbiting particles */}
+                  {[0, 120, 240].map((angle, index) => (
+                    <motion.div
+                      key={index}
+                      className="absolute inset-0 flex items-center justify-center"
+                      animate={{
+                        rotate: 360,
+                      }}
+                      transition={{
+                        duration: 4 + index,
+                        repeat: Infinity,
+                        ease: 'linear',
+                      }}
+                    >
+                      <motion.div
+                        className="absolute w-2 h-2 bg-white rounded-full"
+                        style={{
+                          top: '-20px',
+                        }}
+                        animate={{
+                          scale: [1, 1.5, 1],
+                          opacity: [0.5, 1, 0.5],
+                        }}
+                        transition={{
+                          duration: 2,
+                          repeat: Infinity,
+                        }}
+                      />
+                    </motion.div>
+                  ))}
                 </div>
-              </div>
+              </motion.div>
+
+              <motion.h1
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+                className="text-4xl font-bold text-white mb-2"
+              >
+                NEURAL ACCESS
+              </motion.h1>
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.4 }}
+                className="text-white/60 text-sm"
+              >
+                Enter the AI Core
+              </motion.p>
             </div>
 
             {/* Error */}
             <AnimatePresence>
               {error && (
                 <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  className="mb-4 p-3 border border-red-500/50 bg-red-500/10 text-red-400 font-mono text-xs"
+                  initial={{ opacity: 0, scale: 0.9, x: -20 }}
+                  animate={{ opacity: 1, scale: 1, x: 0 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  className="mb-6 p-4 bg-red-500/10 border-2 border-red-500/50 rounded-xl text-red-400 text-sm text-center relative z-10"
                 >
-                  <div className="flex items-center space-x-2">
-                    <span className="text-red-500">[ERROR]</span>
+                  <div className="flex items-center justify-center space-x-2">
+                    <Zap className="w-4 h-4" />
                     <span>{error}</span>
                   </div>
                 </motion.div>
@@ -266,77 +284,105 @@ export default function AILogin() {
             </AnimatePresence>
 
             {/* Form */}
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
-                <label className="block text-white/80 text-xs mb-2 uppercase tracking-wider font-mono flex items-center space-x-2">
-                  <span className="text-white/40">[INPUT]</span>
-                  <span>WP_USERNAME</span>
+            <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.5 }}
+              >
+                <label className="block text-white text-sm font-semibold mb-2 flex items-center space-x-2">
+                  <Atom className="w-4 h-4" />
+                  <span>Username</span>
                 </label>
-                <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-white/40 text-sm">$</span>
+                <div className="relative group">
+                  <div className="absolute inset-0 bg-white/5 rounded-xl blur opacity-0 group-hover:opacity-100 transition-opacity" />
                   <input
                     type="text"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
-                    className="w-full bg-black/70 border border-white/20 text-white px-8 py-3 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-white/50 focus:border-white/50 transition-all pl-8"
-                    placeholder="username"
+                    className="relative w-full bg-black/50 border-2 border-white/20 rounded-xl text-white px-4 py-3 focus:outline-none focus:border-white/50 focus:ring-2 focus:ring-white/20 transition-all placeholder-white/30"
+                    placeholder="Enter your username"
                     required
                   />
                 </div>
-              </div>
+              </motion.div>
 
-              <div>
-                <label className="block text-white/80 text-xs mb-2 uppercase tracking-wider font-mono flex items-center space-x-2">
-                  <span className="text-white/40">[SECURE]</span>
-                  <span>APP_PASSWORD</span>
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.6 }}
+              >
+                <label className="block text-white text-sm font-semibold mb-2 flex items-center space-x-2">
+                  <Lock className="w-4 h-4" />
+                  <span>Password</span>
                 </label>
-                <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-white/40 text-sm">$</span>
+                <div className="relative group">
+                  <div className="absolute inset-0 bg-white/5 rounded-xl blur opacity-0 group-hover:opacity-100 transition-opacity" />
                   <input
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full bg-black/70 border border-white/20 text-white px-8 py-3 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-white/50 focus:border-white/50 transition-all pl-8"
-                    placeholder="••••••••"
+                    className="relative w-full bg-black/50 border-2 border-white/20 rounded-xl text-white px-4 py-3 focus:outline-none focus:border-white/50 focus:ring-2 focus:ring-white/20 transition-all placeholder-white/30"
+                    placeholder="Enter your password"
                     required
                   />
                 </div>
-              </div>
+              </motion.div>
 
               <motion.button
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.7 }}
                 type="submit"
                 disabled={isLoading}
-                whileHover={{ scale: isLoading ? 1 : 1.01 }}
-                whileTap={{ scale: isLoading ? 1 : 0.99 }}
-                className="w-full bg-white text-black font-bold py-4 px-6 uppercase tracking-wider border border-white hover:bg-black hover:text-white transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2 font-mono text-sm"
+                whileHover={{ scale: isLoading ? 1 : 1.05, y: -2 }}
+                whileTap={{ scale: isLoading ? 1 : 0.95 }}
+                className="relative w-full bg-white text-black font-bold py-4 px-6 rounded-xl uppercase tracking-wider disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-3 text-lg shadow-[0_0_30px_rgba(255,255,255,0.3)] hover:shadow-[0_0_50px_rgba(255,255,255,0.5)] transition-all duration-300 overflow-hidden group"
               >
+                {/* Animated background */}
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-white via-white/80 to-white opacity-0 group-hover:opacity-100 transition-opacity"
+                  animate={{
+                    x: ['-100%', '100%'],
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    repeatType: 'loop',
+                  }}
+                />
+
                 {isLoading ? (
                   <>
-                    <span className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin" />
-                    <span>[PROCESSING] AUTHENTICATING...</span>
+                    <motion.div
+                      animate={{ rotate: 360 }}
+                      transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                      className="w-5 h-5 border-2 border-black border-t-transparent rounded-full"
+                    />
+                    <span className="relative z-10">PROCESSING...</span>
                   </>
                 ) : (
                   <>
-                    <Terminal className="w-4 h-4" />
-                    <span>[EXECUTE] AUTHENTICATE</span>
+                    <Sparkles className="w-5 h-5 relative z-10" />
+                    <span className="relative z-10">ACTIVATE</span>
                   </>
                 )}
               </motion.button>
             </form>
 
-            {/* Footer */}
-            <div className="mt-6 pt-4 border-t border-white/10">
-              <div className="flex items-center justify-between text-white/30 text-[10px] font-mono">
-                <div className="flex items-center space-x-4">
-                  <span>API: /wp-json/wp/v2/users/me</span>
-                  <span>•</span>
-                  <span>PROTOCOL: Basic Auth</span>
-                </div>
-                <div>
-                  <span>STATUS: {isLoading ? 'PROCESSING' : 'READY'}</span>
-                </div>
-              </div>
-            </div>
+            {/* Fun Footer */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.8 }}
+              className="mt-8 pt-6 border-t border-white/10 text-center relative z-10"
+            >
+              <p className="text-white/50 text-xs flex items-center justify-center space-x-2">
+                <Cpu className="w-3 h-3" />
+                <span>Neural network ready</span>
+                <Sparkles className="w-3 h-3 text-white animate-pulse" />
+              </p>
+            </motion.div>
           </div>
         </div>
       </motion.div>

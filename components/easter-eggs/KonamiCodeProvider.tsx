@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import { motion } from 'framer-motion'
 
 const KONAMI_CODE = [
@@ -23,6 +23,7 @@ export default function KonamiCodeProvider({
   children: React.ReactNode
 }) {
   const router = useRouter()
+  const pathname = usePathname()
   const [sequence, setSequence] = useState<string[]>([])
   const [isShaking, setIsShaking] = useState(false)
 
@@ -39,7 +40,13 @@ export default function KonamiCodeProvider({
         if (isMatch) {
           setIsShaking(true)
           setTimeout(() => {
+            // Games sayfasında veya games alt sayfalarındaysak snake sayfasına yönlendir
+            if (pathname?.startsWith('/games') && !pathname?.startsWith('/games/snake')) {
+              router.push('/games/snake')
+            } else {
+              // Diğer sayfalarda wormhole'a yönlendir
             router.push('/wormhole')
+            }
             setIsShaking(false)
             setSequence([])
           }, 500)
@@ -49,7 +56,7 @@ export default function KonamiCodeProvider({
 
     window.addEventListener('keydown', handleKeyPress)
     return () => window.removeEventListener('keydown', handleKeyPress)
-  }, [sequence, router])
+  }, [sequence, router, pathname])
 
   return (
     <motion.div

@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { Terminal, Home, Brain } from 'lucide-react'
+import { Terminal, Bot, Brain, Home, Gamepad2 } from 'lucide-react'
 import { motion } from 'framer-motion'
 
 export default function RoboticsHeader() {
@@ -35,6 +35,19 @@ export default function RoboticsHeader() {
               </motion.div>
             </Link>
 
+            {/* Robotics Card - Active */}
+            <Link href="/robotics">
+              <motion.div
+                className="hidden md:flex items-center space-x-2 px-3 py-2 bg-slate-900/80 border-2 border-orange-500 rounded-lg font-mono text-xs text-orange-500 hover:border-orange-400 hover:bg-slate-900 transition-all duration-300 group cursor-pointer shadow-[0_0_15px_rgba(251,146,60,0.3)]"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <Bot className="w-4 h-4" />
+                <span className="group-hover:hidden">ROBOTICS</span>
+                <span className="hidden group-hover:inline">THE_HANGAR</span>
+              </motion.div>
+            </Link>
+
             {/* AI Card */}
             <Link href="/ai">
               <motion.div
@@ -45,6 +58,19 @@ export default function RoboticsHeader() {
                 <Brain className="w-4 h-4" />
                 <span className="group-hover:hidden">AI</span>
                 <span className="hidden group-hover:inline">THE_CORE</span>
+              </motion.div>
+            </Link>
+
+            {/* Games Card */}
+            <Link href="/games">
+              <motion.div
+                className="hidden md:flex items-center space-x-2 px-3 py-2 bg-gradient-to-r from-cyan-500/20 via-purple-500/20 to-orange-500/20 border border-cyan-400/30 rounded-lg font-mono text-xs text-cyan-400 hover:border-cyan-400 hover:bg-gradient-to-r hover:from-cyan-500/30 hover:via-purple-500/30 hover:to-orange-500/30 transition-all duration-300 group cursor-pointer"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <Gamepad2 className="w-4 h-4" />
+                <span className="group-hover:hidden">GAMES</span>
+                <span className="hidden group-hover:inline">THE_ARENA</span>
               </motion.div>
             </Link>
 
