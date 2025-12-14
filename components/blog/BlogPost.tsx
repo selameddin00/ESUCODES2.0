@@ -6,6 +6,7 @@ import { Calendar, Clock, Share2 } from 'lucide-react'
 import { motion } from 'framer-motion'
 import DOMPurify from 'isomorphic-dompurify'
 import { getPostBySlug, getPosts, type WordPressPost } from '@/actions/wordpress-data'
+import { stripHtmlTags } from '@/lib/text/stripHtmlTags'
 
 interface Post {
   title: string
@@ -177,7 +178,7 @@ export default function BlogPost({ slug }: { slug: string }) {
         const wpPost = await getPostBySlug(slug)
 
         if (wpPost) {
-          const wordCount = wpPost.content.rendered.replace(/<[^>]*>/g, '').split(/\s+/).length
+          const wordCount = stripHtmlTags(wpPost.content.rendered).split(/\s+/).length
           const readTime = Math.ceil(wordCount / 200)
           const wpAuthor = wpPost._embedded?.author?.[0]
           const hasAuthor = !!wpAuthor?.name
@@ -252,7 +253,7 @@ export default function BlogPost({ slug }: { slug: string }) {
       try {
         await navigator.share({
           title: post.title,
-          text: post.content.replace(/<[^>]*>/g, '').substring(0, 100),
+          text: stripHtmlTags(post.content, 110).substring(0, 100),
           url: window.location.href,
         })
       } catch (err) {

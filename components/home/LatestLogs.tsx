@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { ArrowRight, Calendar } from 'lucide-react'
 import { getPosts, type WordPressPost } from '@/actions/wordpress-data'
+import { stripHtmlTags } from '@/lib/text/stripHtmlTags'
 
 interface Post {
   id: number
@@ -26,8 +27,7 @@ export default function LatestLogs() {
         
         // Posts'u dönüştür
         const transformedPosts: Post[] = posts.map((post: WordPressPost) => {
-          const excerptText = post.excerpt.rendered
-            .replace(/<[^>]*>/g, '')
+          const excerptText = stripHtmlTags(post.excerpt.rendered, 110)
             .trim()
             .substring(0, 100)
 

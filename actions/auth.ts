@@ -7,6 +7,7 @@ import { LoginSchema } from '@/lib/schemas/auth'
 import { checkRateLimit, resetRateLimit } from '@/lib/rate-limit'
 import { verifyCsrfToken } from '@/lib/csrf'
 import { TrustedError, SystemError, logError, getSafeErrorMessage } from '@/lib/errors'
+import { secureRandomBool } from '@/lib/security/secureRandom'
 
 const WORDPRESS_API_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL || ''
 
@@ -158,7 +159,7 @@ function validateSession(token: string, updateActivity: boolean = true): StoredS
   
   // Periodic cleanup (runs on every validation)
   // TODO: In production, use Redis TTL or database cleanup job
-  if (Math.random() < 0.01) { // ~1% chance to run cleanup
+  if (secureRandomBool(0.01)) { // ~1% chance to run cleanup
     cleanupExpiredSessions()
   }
   

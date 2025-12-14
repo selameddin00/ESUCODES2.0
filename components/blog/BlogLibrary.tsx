@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Search, Calendar } from 'lucide-react'
 import { getPosts, getCategories, type WordPressPost, type WordPressCategory } from '@/actions/wordpress-data'
+import { stripHtmlTags } from '@/lib/text/stripHtmlTags'
 
 const POSTS_PER_PAGE = 12
 
@@ -57,9 +58,8 @@ export default function BlogLibrary() {
 
         // Posts'u dönüştür
         const transformedPosts: Post[] = posts.map((post: WordPressPost) => {
-          // HTML'den text çıkar
-          const excerptText = post.excerpt.rendered
-            .replace(/<[^>]*>/g, '')
+          // HTML'den text çıkar (regex-free, deterministic state machine)
+          const excerptText = stripHtmlTags(post.excerpt.rendered, 160)
             .trim()
             .substring(0, 150)
 

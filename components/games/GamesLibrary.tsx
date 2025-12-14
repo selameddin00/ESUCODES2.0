@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Search, Calendar, Gamepad2 } from 'lucide-react'
 import { getPosts, getCategories, type WordPressPost, type WordPressCategory } from '@/actions/wordpress-data'
+import { stripHtmlTags } from '@/lib/text/stripHtmlTags'
 
 const POSTS_PER_PAGE = 12
 
@@ -52,8 +53,7 @@ export default function GamesLibrary() {
             )
           })
           .map((post: WordPressPost) => {
-            const excerptText = post.excerpt.rendered
-              .replace(/<[^>]*>/g, '')
+            const excerptText = stripHtmlTags(post.excerpt.rendered, 160)
               .trim()
               .substring(0, 150)
 
